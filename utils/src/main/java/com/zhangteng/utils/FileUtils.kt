@@ -310,53 +310,7 @@ fun Long.formatFileSize(sizeType: Int = 1): Double {
 }
 
 /**
- * 获取缓存文件夹
- *
- * @return
- */
-fun Context?.getDiskCacheDir(): String? {
-    if (this == null) return this?.externalCacheDir?.absolutePath
-    //isExternalStorageEmulated()设备的外存是否是用内存模拟的，是则返回true
-    return if ((Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageEmulated()) && externalCacheDir != null) {
-        externalCacheDir!!.absolutePath
-    } else {
-        cacheDir.absolutePath
-    }
-}
-
-/**
- * 获取图片文件夹
- *
- * @return 文件夹路径
- */
-val pictureDir: String
-    get() = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath
-
-/**
- * 获取视频文件夹
- *
- * @return 文件夹路径
- */
-val videoDir: String
-    get() = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).absolutePath
-
-/**
- * 获取媒体文件夹
- *
- * @return
- */
-fun Context?.getFilesDir(): String? {
-    if (this == null) return this?.filesDir?.absolutePath
-    //isExternalStorageEmulated()设备的外存是否是用内存模拟的，是则返回true
-    return if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageEmulated()) {
-        Environment.getExternalStorageDirectory().absolutePath
-    } else {
-        filesDir.absolutePath
-    }
-}
-
-/**
- * 在缓存路径里创建文件
+ * 创建jpg文件
  *
  * @param rootPath 文件夹根路径
  * @param filePath 相对路径
@@ -372,7 +326,7 @@ fun Context?.createImageFile(rootPath: String, filePath: String): File {
 }
 
 /**
- * 在缓存路径里创建初始文件夹。保存拍摄图片和剪裁后的图片
+ * 创建文件夹。保存拍摄图片和剪裁后的图片
  *
  * @param rootPath 文件夹根路径
  * @param filePath 相对路径
@@ -403,7 +357,7 @@ fun Context?.createFile(rootPath: String, filePath: String) {
 }
 
 /**
- * 获取缓存路径里的剪裁文件夹
+ * 获取剪裁文件夹
  *
  * @param rootPath 文件夹根路径
  * @param path 相对路径
@@ -444,4 +398,80 @@ fun Context?.getJsonFromAssets(fileName: String?): String? {
         sb.delete(0, sb.length)
     }
     return sb.toString().trim { it <= ' ' }
+}
+
+/**
+ * 获取图片文件夹 也可以通过Context.getFilesDir(Environment.DIRECTORY_PICTURES)获取
+ *
+ * @return 文件夹路径
+ */
+val pictureDir: String
+    get() = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath
+
+/**
+ * 获取视频文件夹 也可以通过Context.getFilesDir(Environment.DIRECTORY_MOVIES)获取
+ *
+ * @return 文件夹路径
+ */
+val videoDir: String
+    get() = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).absolutePath
+
+/**
+ * 获取共享文件夹
+ *
+ * @return
+ */
+fun Context?.getFilesDir(): String? {
+    if (this == null) return this?.filesDir?.absolutePath
+    //isExternalStorageEmulated()设备的外存是否是用内存模拟的，是则返回true
+    return if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageEmulated()) {
+        Environment.getExternalStorageDirectory().absolutePath
+    } else {
+        filesDir.absolutePath
+    }
+}
+
+/**
+ * 获取共享文件夹
+ * @param type – The type of files directory to return. May be null for the root of the files directory or one of the following constants for a subdirectory: Environment.DIRECTORY_MUSIC, Environment.DIRECTORY_PODCASTS, Environment.DIRECTORY_RINGTONES, Environment.DIRECTORY_ALARMS, Environment.DIRECTORY_NOTIFICATIONS, Environment.DIRECTORY_PICTURES, or Environment.DIRECTORY_MOVIES.
+ * @return
+ */
+fun Context?.getFilesDir(type: String?): String? {
+    if (this == null) return this?.filesDir?.absolutePath
+    //isExternalStorageEmulated()设备的外存是否是用内存模拟的，是则返回true
+    return if ((Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageEmulated()) && externalCacheDir != null) {
+        Environment.getExternalStoragePublicDirectory(type).absolutePath
+    } else {
+        filesDir.absolutePath
+    }
+}
+
+/**
+ * 获取私有文件夹
+ * @param type – The type of files directory to return. May be null for the root of the files directory or one of the following constants for a subdirectory: Environment.DIRECTORY_MUSIC, Environment.DIRECTORY_PODCASTS, Environment.DIRECTORY_RINGTONES, Environment.DIRECTORY_ALARMS, Environment.DIRECTORY_NOTIFICATIONS, Environment.DIRECTORY_PICTURES, or Environment.DIRECTORY_MOVIES.
+ * @return
+ */
+fun Context?.getDiskDir(type: String?): String? {
+    if (this == null) return this?.getExternalFilesDir(type)?.absolutePath
+    //isExternalStorageEmulated()设备的外存是否是用内存模拟的，是则返回true
+    return if ((Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageEmulated()) && externalCacheDir != null) {
+        getExternalFilesDir(type)!!.absolutePath
+    } else {
+        filesDir.absolutePath
+    }
+}
+
+/**
+ * 获取私有缓存文件夹
+ *
+ * @return
+ */
+fun Context?.getDiskCacheDir(): String? {
+    if (this == null) return this?.externalCacheDir?.absolutePath
+    //isExternalStorageEmulated()设备的外存是否是用内存模拟的，是则返回true
+    return if ((Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageEmulated()) && externalCacheDir != null) {
+        externalCacheDir!!.absolutePath
+    } else {
+        cacheDir.absolutePath
+    }
 }
