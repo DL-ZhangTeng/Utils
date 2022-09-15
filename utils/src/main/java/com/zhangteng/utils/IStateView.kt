@@ -4,11 +4,29 @@ import android.content.DialogInterface
 import android.view.View
 
 /**
+ * description: StateView加载中显示抽象接口
+ * author: Swing
+ * date: 2022/9/14
+ */
+interface ILoadingView {
+    /**
+     * description 加载中弹窗
+     * @param mLoadingText 加载中...
+     */
+    fun showProgressDialog(mLoadingText: String? = StateViewHelper.loadingText)
+
+    /**
+     * description 关闭加载中弹窗
+     */
+    fun dismissProgressDialog()
+}
+
+/**
  * description: StateView显示抽象接口
  * author: Swing
  * date: 2022/9/14
  */
-interface IStateView {
+interface IStateView : ILoadingView {
     /**
      * description 创建 StateViewHelper类，并回调重试请求、取消请求监听
      */
@@ -49,17 +67,6 @@ interface IStateView {
      * @param contentView 要展示的View
      */
     fun showContentView(contentView: View?)
-
-    /**
-     * description 加载中弹窗
-     * @param mLoadingText 加载中...
-     */
-    fun showProgressDialog(mLoadingText: String? = StateViewHelper.loadingText)
-
-    /**
-     * description 关闭加载中弹窗
-     */
-    fun dismissProgressDialog()
 
     /**
      * description 状态View重新请求回调
