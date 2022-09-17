@@ -1,4 +1,4 @@
-package com.zhangteng.utils
+package com.zhangteng.app
 
 import org.junit.Test
 
