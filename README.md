@@ -11,7 +11,7 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:Utils:1.0.0'
+implementation 'com.github.DL-ZhangTeng:Utils:2.0.0'
 ```
 
 ## 混淆
@@ -20,6 +20,7 @@ implementation 'com.github.DL-ZhangTeng:Utils:1.0.0'
 
 版本| 更新| 更新时间
 --- | --- | ---
+v2.0.0| 增加加载中显示抽象接口ILoadingView| 2022/9/14 at 21:13
 v1.0.0| 常用工具从BaseLibrary独立出来| 2022/9/2 at 20:00
 
 ## 赞赏
