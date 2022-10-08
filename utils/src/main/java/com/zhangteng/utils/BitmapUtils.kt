@@ -3,12 +3,15 @@ package com.zhangteng.utils
 import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.min
 import kotlin.math.sqrt
+
 
 /**
  * description drawable转Bitmap
@@ -509,5 +512,93 @@ fun Bitmap?.scaleWithWH(w: Double, h: Double): Bitmap? {
         matrix.postScale(scaleWidth, scaleHeight)
         // 创建缩放后的图片
         Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
+    }
+}
+
+/**
+ * 质量压缩（压缩到size以下）
+ *
+ * @param size 压缩后的大小，默认100KB
+ * @return
+ */
+fun Bitmap?.compressImage(size: Long = 100 * 1024): Bitmap? {
+    return if (this == null) {
+        null
+    } else {
+        var byteOutputStream: ByteArrayOutputStream? = null
+        var isBm: ByteArrayInputStream? = null
+        try {
+            byteOutputStream = ByteArrayOutputStream()
+            // 质量压缩方法，这里100表示不压缩，把压缩后的数据存放到byteOutputStream中
+            this.compress(Bitmap.CompressFormat.JPEG, 100, byteOutputStream)
+            var options = 90
+            // 循环判断如果压缩后图片是否大于100kb,大于继续压缩
+            while (byteOutputStream.toByteArray().size > size) {
+                // 重置byteOutputStream即清空byteOutputStream
+                byteOutputStream.reset()
+                // 这里压缩options%，把压缩后的数据存放到byteOutputStream中
+                this.compress(Bitmap.CompressFormat.JPEG, options, byteOutputStream)
+                // 每次都减少10
+                options -= 10
+            }
+            // 把压缩后的数据byteOutputStream存放到ByteArrayInputStream中
+            isBm = ByteArrayInputStream(byteOutputStream.toByteArray())
+            return BitmapFactory.decodeStream(isBm, null, null)
+        } catch (e: Exception) {
+            this
+        } finally {
+            byteOutputStream?.close()
+            isBm?.close()
+        }
+    }
+}
+
+/**
+ * 比例压缩（尺寸压缩、采样率压缩）
+ * @param mWidth 目标宽度，用于计算缩放比，默认720
+ * @param mHeight 目标高度，用于计算缩放比，默认1280
+ * @param mInPreferredConfig 目标颜色和透明度，默认Bitmap.Config.RGB_565
+ * @return
+ */
+fun Bitmap?.compressImage(
+    mWidth: Int = 720,
+    mHeight: Int = 1280,
+    mInPreferredConfig: Bitmap.Config = Bitmap.Config.RGB_565
+): Bitmap? {
+    return if (this == null) {
+        null
+    } else {
+        var byteOutputStream: ByteArrayOutputStream? = null
+        var isBm: ByteArrayInputStream? = null
+        try {
+            val newOpts = BitmapFactory.Options()
+            // 开始读入图片，此时把options.inJustDecodeBounds 设回true了
+            newOpts.inJustDecodeBounds = true
+            val w = newOpts.outWidth
+            val h = newOpts.outHeight
+            // 缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+            // be=1表示不缩放
+            var be = 1
+            if (w > h && w > mWidth) { // 如果宽度大的话根据宽度固定大小缩放
+                be = newOpts.outWidth / mWidth
+            } else if (w < h && h > mHeight) { // 如果高度高的话根据高度固定大小缩放
+                be = newOpts.outHeight / mHeight
+            }
+            if (be <= 0) be = 1
+            newOpts.inSampleSize = be // 设置缩放比例
+            //降低图片从ARGB888到RGB565
+            newOpts.inPreferredConfig = mInPreferredConfig
+
+            byteOutputStream = ByteArrayOutputStream()
+            compress(Bitmap.CompressFormat.JPEG, 100, byteOutputStream)
+            // 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+            isBm = ByteArrayInputStream(byteOutputStream.toByteArray())
+            return BitmapFactory.decodeStream(isBm, null, newOpts)
+        } catch (e: Exception) {
+            this
+        } finally {
+            byteOutputStream?.close()
+            isBm?.close()
+        }
     }
 }
