@@ -275,27 +275,6 @@ fun Bitmap?.createWaterMaskCenter(watermark: Bitmap?): Bitmap? {
 }
 
 /**
- * description 创建新的bitmap
- * @param newWidth
- * @param newHeight
- * @return
- */
-fun Bitmap?.getNewBitmap(newWidth: Int, newHeight: Int): Bitmap? {
-    if (this == null) return null
-    // 获得图片的宽高.
-    val width = width
-    val height = height
-    // 计算缩放比例.
-    val scaleWidth = newWidth.toFloat() / width
-    val scaleHeight = newHeight.toFloat() / height
-    // 取得想要缩放的matrix参数.
-    val matrix = Matrix()
-    matrix.postScale(scaleWidth, scaleHeight)
-    // 得到新的图片.
-    return Bitmap.createBitmap(this, 0, 0, width, height, matrix, true)
-}
-
-/**
  * description 添加水印
  * @param watermark 水印图片
  * @param paddingLeft 距左px
@@ -311,23 +290,23 @@ fun Bitmap?.createWaterMaskBitmap(
     if (watermark == null) return this
     val width = width
     val height = height
-    val bitmaptwo = watermark.getNewBitmap(width, height / 3)
+    val bitmapTwo = watermark.scaleWithWH(width.toDouble(), (height / 3).toDouble())
     //创建一个bitmap
-    val newb =
+    val newBitmap =
         Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888) // 创建一个新的和SRC长度宽度一样的位图
     //将该图片作为画布
-    val canvas = Canvas(newb)
+    val canvas = Canvas(newBitmap)
     //在画布 0，0坐标上开始绘制原始图片
     canvas.drawBitmap(this, 0f, 0f, null)
     //在画布上绘制水印图片
-    if (bitmaptwo != null) {
-        canvas.drawBitmap(bitmaptwo, paddingLeft.toFloat(), paddingTop.toFloat(), null)
+    if (bitmapTwo != null) {
+        canvas.drawBitmap(bitmapTwo, paddingLeft.toFloat(), paddingTop.toFloat(), null)
     }
     // 保存
     canvas.save()
     // 存储
     canvas.restore()
-    return newb
+    return newBitmap
 }
 
 /**
@@ -521,14 +500,11 @@ fun Bitmap?.scaleWithWH(w: Double, h: Double): Bitmap? {
     return if (w == 0.0 || h == 0.0 || this == null) {
         this
     } else {
-        // 记录src的宽高
-        val width = width
-        val height = height
-        // 创建一个matrix容器
-        val matrix = Matrix()
         // 计算缩放比例
         val scaleWidth = (w / width).toFloat()
         val scaleHeight = (h / height).toFloat()
+        // 创建一个matrix容器
+        val matrix = Matrix()
         // 开始缩放
         matrix.postScale(scaleWidth, scaleHeight)
         // 创建缩放后的图片
