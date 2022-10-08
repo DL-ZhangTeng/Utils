@@ -555,14 +555,12 @@ fun Bitmap?.compressImage(size: Long = 100 * 1024): Bitmap? {
 
 /**
  * 比例压缩（尺寸压缩、采样率压缩）
- * @param mWidth 目标宽度，用于计算缩放比，默认720
- * @param mHeight 目标高度，用于计算缩放比，默认1280
+ * @param mInSampleSize 目标采样率，默认1
  * @param mInPreferredConfig 目标颜色和透明度，默认Bitmap.Config.RGB_565
  * @return
  */
 fun Bitmap?.compressImage(
-    mWidth: Int = 720,
-    mHeight: Int = 1280,
+    mInSampleSize: Int = 1,
     mInPreferredConfig: Bitmap.Config = Bitmap.Config.RGB_565
 ): Bitmap? {
     return if (this == null) {
@@ -574,18 +572,26 @@ fun Bitmap?.compressImage(
             val newOpts = BitmapFactory.Options()
             // 开始读入图片，此时把options.inJustDecodeBounds 设回true了
             newOpts.inJustDecodeBounds = true
-            val w = newOpts.outWidth
-            val h = newOpts.outHeight
-            // 缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
-            // be=1表示不缩放
-            var be = 1
-            if (w > h && w > mWidth) { // 如果宽度大的话根据宽度固定大小缩放
-                be = newOpts.outWidth / mWidth
-            } else if (w < h && h > mHeight) { // 如果高度高的话根据高度固定大小缩放
-                be = newOpts.outHeight / mHeight
+
+            if (mInSampleSize != 1) {//如果设置了mInSampleSize
+                newOpts.inSampleSize = mInSampleSize // 设置缩放比例
+            } else {//如果未设置了mInSampleSize计算缩放比
+                val w = newOpts.outWidth
+                val h = newOpts.outHeight
+                val mWidth = 720
+                val mHeight = 1280
+                // 缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+                // be=1表示不缩放
+                var be = 1
+                if (w > h && w > mWidth) { // 如果宽度大的话根据宽度固定大小缩放
+                    be = newOpts.outWidth / mWidth
+                } else if (w < h && h > mHeight) { // 如果高度高的话根据高度固定大小缩放
+                    be = newOpts.outHeight / mHeight
+                }
+                if (be <= 0) be = 1
+                newOpts.inSampleSize = be // 设置缩放比例
             }
-            if (be <= 0) be = 1
-            newOpts.inSampleSize = be // 设置缩放比例
+
             //降低图片从ARGB888到RGB565
             newOpts.inPreferredConfig = mInPreferredConfig
 
