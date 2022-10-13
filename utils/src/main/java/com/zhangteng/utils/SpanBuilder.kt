@@ -85,4 +85,19 @@ class SpanBuilder(
         }
         return this
     }
+
+    /**
+     * Mark the specified range of text with the specified object.
+     * The flags determine how the span will behave when text is
+     * inserted at the start or end of the span's range.
+     */
+    fun findAndSpan(
+        span: Any,
+        start: Int,
+        end: Int,
+        flags: Int = Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+    ): SpanBuilder {
+        setSpan(span, start, end, flags)
+        return this
+    }
 }
