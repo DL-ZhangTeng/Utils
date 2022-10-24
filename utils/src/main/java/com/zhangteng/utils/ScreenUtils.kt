@@ -3,7 +3,10 @@ package com.zhangteng.utils
 import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Rect
+import android.view.View
 
 /**
  * 获取当前屏幕截图，包含状态栏
@@ -47,6 +50,20 @@ fun Activity?.snapShotWithoutStatusBar(): Bitmap? {
     )
     view.destroyDrawingCache()
     return bp
+}
+
+/**
+ * 获取当View截图
+ *
+ * @return
+ */
+fun View?.snapShotView(): Bitmap? {
+    if (this == null) return null
+    val bmp = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+    val c = Canvas(bmp)
+    c.drawColor(Color.WHITE)
+    draw(c)
+    return bmp
 }
 
 /**
