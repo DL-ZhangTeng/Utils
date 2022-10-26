@@ -11,17 +11,18 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:Utils:2.0.0'
+implementation 'com.github.DL-ZhangTeng:Utils:2.0.1'
 ```
 
 ## 混淆
 -keep public class com.zhangteng.**.*{ *; }
 ## 历史版本
 
-| 版本     | 更新                      | 更新时间               |
-|--------|-------------------------|--------------------|
-| v2.0.0 | 增加加载中显示抽象接口ILoadingView | 2022/9/14 at 21:13 |
-| v1.0.0 | 常用工具从BaseLibrary独立出来    | 2022/9/2 at 20:00  |
+| 版本     | 更新                               | 更新时间                |
+|--------|----------------------------------|---------------------|
+| v2.0.1 | BitmapUtils.kt增加压缩图片方法、获取view的截图 | 2022/10/26 at 11:13 |
+| v2.0.0 | 增加加载中显示抽象接口ILoadingView          | 2022/9/14 at 21:13  |
+| v1.0.0 | 常用工具从BaseLibrary独立出来             | 2022/9/2 at 20:00   |
 
 ## 赞赏
 如果您喜欢BaseLibrary，或感觉BaseLibrary帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢
