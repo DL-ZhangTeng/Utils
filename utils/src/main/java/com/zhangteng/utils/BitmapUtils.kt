@@ -33,6 +33,13 @@ fun Drawable?.drawableToBitmap(): Bitmap? {
 
 /**
  * description 保存bitmap
+ * 如果要在相册中显示使用以下方式刷新图库
+ * 保存到
+ * Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath()
+ * 刷新图库
+ * Uri uri = Uri.fromFile(file);
+ * context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri));
+ *
  * @param dir 文件路径
  * @param name 文件名
  * @return 保存是否成功
