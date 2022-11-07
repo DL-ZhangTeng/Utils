@@ -422,7 +422,7 @@ val videoDir: String
  * @return
  */
 fun Context?.getFilesDir(): String? {
-    if (this == null) return this?.filesDir?.absolutePath
+    if (this == null) return  Environment.getExternalStorageDirectory().absolutePath
     //isExternalStorageEmulated()设备的外存是否是用内存模拟的，是则返回true
     return if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageEmulated()) {
         Environment.getExternalStorageDirectory().absolutePath
@@ -437,7 +437,7 @@ fun Context?.getFilesDir(): String? {
  * @return
  */
 fun Context?.getFilesDir(type: String?): String? {
-    if (this == null) return this?.filesDir?.absolutePath
+    if (this == null) return Environment.getExternalStoragePublicDirectory(type).absolutePath
     //isExternalStorageEmulated()设备的外存是否是用内存模拟的，是则返回true
     return if ((Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageEmulated()) && externalCacheDir != null) {
         Environment.getExternalStoragePublicDirectory(type).absolutePath
@@ -452,7 +452,7 @@ fun Context?.getFilesDir(type: String?): String? {
  * @return
  */
 fun Context?.getDiskDir(type: String?): String? {
-    if (this == null) return this?.getExternalFilesDir(type)?.absolutePath
+    if (this == null) return Environment.getExternalStoragePublicDirectory(type).absolutePath
     //isExternalStorageEmulated()设备的外存是否是用内存模拟的，是则返回true
     return if ((Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageEmulated()) && externalCacheDir != null) {
         getExternalFilesDir(type)!!.absolutePath
@@ -467,7 +467,7 @@ fun Context?.getDiskDir(type: String?): String? {
  * @return
  */
 fun Context?.getDiskCacheDir(): String? {
-    if (this == null) return this?.externalCacheDir?.absolutePath
+    if (this == null) return Environment.getExternalStorageDirectory().absolutePath
     //isExternalStorageEmulated()设备的外存是否是用内存模拟的，是则返回true
     return if ((Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() || !Environment.isExternalStorageEmulated()) && externalCacheDir != null) {
         externalCacheDir!!.absolutePath
