@@ -70,11 +70,11 @@ class ThreadPoolUtils private constructor() {
      * 延时任务添加到线程池中
      *
      * @param task
-     * @param delayTime
+     * @param delayTime 毫秒
      */
-    fun addDelayExecuteTask(task: Runnable?, delayTime: Int) {
+    fun addDelayExecuteTask(task: Runnable?, delayTime: Long) {
         appSchedule.schedule(
-            DelayTask(task), delayTime.toLong(),
+            DelayTask(task), delayTime,
             TimeUnit.MILLISECONDS
         )
     }
@@ -86,11 +86,11 @@ class ThreadPoolUtils private constructor() {
      * @param delay
      * @param period
      */
-    fun addPeriodDelayExecuteTask(task: Runnable?, delay: Long?, period: Long?) {
+    fun addPeriodDelayExecuteTask(task: Runnable?, delay: Long, period: Long) {
         appSchedule.scheduleWithFixedDelay(
             DelayTask(task),
-            delay!!,
-            period!!,
+            delay,
+            period,
             TimeUnit.MILLISECONDS
         )
     }
