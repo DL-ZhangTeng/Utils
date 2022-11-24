@@ -2,16 +2,13 @@ package com.zhangteng.utils
 
 import android.app.Activity
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Rect
+import android.graphics.*
+import android.os.Build
 import android.view.View
+import android.view.WindowManager
 
 /**
  * 获取当前屏幕截图，包含状态栏
- *
- * @return
  */
 fun Activity?.snapShotWithStatusBar(): Bitmap? {
     this ?: return null
@@ -29,8 +26,6 @@ fun Activity?.snapShotWithStatusBar(): Bitmap? {
 
 /**
  * 获取当前屏幕截图，不包含状态栏
- *
- * @return
  */
 fun Activity?.snapShotWithoutStatusBar(): Bitmap? {
     this ?: return null
@@ -54,8 +49,6 @@ fun Activity?.snapShotWithoutStatusBar(): Bitmap? {
 
 /**
  * 获取当View截图
- *
- * @return
  */
 fun View?.snapShotView(): Bitmap? {
     if (this == null) return null
@@ -68,9 +61,6 @@ fun View?.snapShotView(): Bitmap? {
 
 /**
  * 获得状态栏的高度
- *
- * @param context
- * @return
  */
 fun Context?.getStatusHeight(): Int {
     var statusHeight = -1
@@ -84,4 +74,50 @@ fun Context?.getStatusHeight(): Int {
         e.printStackTrace()
     }
     return statusHeight
+}
+
+/**
+ * 获取Density
+ */
+fun Context?.getDensity(): Float {
+    if (this == null) return -1f
+    return resources.displayMetrics.density
+}
+
+/**
+ * 获取DPI
+ */
+fun Context?.getDensityDpi(): Int {
+    if (this == null) return -1
+    return resources.displayMetrics.densityDpi
+}
+
+/**
+ * 获取屏幕宽度
+ */
+fun Context?.getScreenWidth(): Int {
+    if (this == null) return -1
+    val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val point = Point()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        wm.defaultDisplay.getRealSize(point)
+    } else {
+        wm.defaultDisplay.getSize(point)
+    }
+    return point.x
+}
+
+/**
+ * 获取屏幕高度
+ */
+fun Context?.getScreenHeight(): Int {
+    if (this == null) return -1
+    val wm = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+    val point = Point()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        wm.defaultDisplay.getRealSize(point)
+    } else {
+        wm.defaultDisplay.getSize(point)
+    }
+    return point.y
 }

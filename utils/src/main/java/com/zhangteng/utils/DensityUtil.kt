@@ -7,7 +7,6 @@ import android.util.TypedValue
  * dp转px
  *
  * @param dpVal
- * @return
  */
 fun Context?.dp2px(dpVal: Float): Int {
     return if (this != null) {
@@ -23,7 +22,6 @@ fun Context?.dp2px(dpVal: Float): Int {
  * sp转px
  *
  * @param spVal
- * @return
  */
 fun Context?.sp2px(spVal: Float): Int {
     return if (this != null) {
@@ -39,7 +37,6 @@ fun Context?.sp2px(spVal: Float): Int {
  * px转dp
  *
  * @param pxVal
- * @return
  */
 fun Context?.px2dp(pxVal: Float): Float {
     if (this == null) return -1f
@@ -51,33 +48,8 @@ fun Context?.px2dp(pxVal: Float): Float {
  * px转sp
  *
  * @param pxVal
- * @return
  */
 fun Context?.px2sp(pxVal: Float): Float {
     if (this == null) return -1f
     return pxVal / resources.displayMetrics.scaledDensity
-}
-
-/**
- * 获取Density
- */
-fun Context?.getDensity(): Float {
-    if (this == null) return -1f
-    return resources.displayMetrics.density
-}
-
-/**
- * 获取屏幕宽度
- */
-fun Context?.getScreenWidth(): Int {
-    if (this == null) return -1
-    return resources.displayMetrics.widthPixels
-}
-
-/**
- * 获取屏幕高度
- */
-fun Context?.getScreenHeight(): Int {
-    if (this == null) return -1
-    return resources.displayMetrics.heightPixels
 }
