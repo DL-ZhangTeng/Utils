@@ -1,9 +1,12 @@
-
 # Utils
+
 包含一些常用工具类
 [GitHub仓库地址](https://github.com/DL-ZhangTeng/Utils)
+
 ## 引入
+
 ### gradle
+
 ```groovy
 allprojects {
     repositories {
@@ -11,27 +14,33 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:Utils:2.0.2'
+implementation 'com.github.DL-ZhangTeng:Utils:2.0.3'
 ```
 
 ## 混淆
+
 -keep public class com.zhangteng.**.*{ *; }
+
 ## 历史版本
 
 | 版本     | 更新                               | 更新时间                |
 |--------|----------------------------------|---------------------|
+| v2.0.3 | 添加解压与读取本地json工具类                 | 2022/11/29 at 11:34 |
 | v2.0.2 | 添加文件切割工具                         | 2022/11/7 at 17:34  |
 | v2.0.1 | BitmapUtils.kt增加压缩图片方法、获取view的截图 | 2022/10/26 at 11:13 |
 | v2.0.0 | 增加加载中显示抽象接口ILoadingView          | 2022/9/14 at 21:13  |
 | v1.0.0 | 常用工具从BaseLibrary独立出来             | 2022/9/2 at 20:00   |
 
 ## 赞赏
+
 如果您喜欢BaseLibrary，或感觉BaseLibrary帮助到了您，可以点右上角“Star”支持一下，您的支持就是我的动力，谢谢
 
 ## 联系我
+
 邮箱：763263311@qq.com/ztxiaoran@foxmail.com
 
 ## License
+
 Copyright (c) [2020] [Swing]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

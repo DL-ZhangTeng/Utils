@@ -84,44 +84,54 @@ open class IException : Exception {
          * 非法数据异常
          */
         const val ILLEGAL_STATE_ERROR = 1006
+
+        /**
+         * 非法参数异常
+         */
+        const val ILLEGAL_ARGUMENT_ERROR = 1007
     }
 
     companion object {
         fun handleException(e: Throwable): IException {
-            return if (e is HttpException) {
-                try {
-                    val message = e.response()!!.errorBody()!!.string()
-                    IException(message, e, e.code())
-                } catch (ioException: IOException) {
-                    ioException.printStackTrace()
-                    val message = ioException.message!!
-                    IException(message, e, e.code())
+            e.printStackTrace()
+            return when (e) {
+                is HttpException -> {
+                    try {
+                        val message = e.response()!!.errorBody()!!.string()
+                        IException(message, e, e.code())
+                    } catch (ioException: IOException) {
+                        ioException.printStackTrace()
+                        val message = ioException.message!!
+                        IException(message, e, e.code())
+                    }
                 }
-            } else if (e is SocketTimeoutException) {
-                IException("网络连接超时，请检查您的网络状态后重试！", e, ERROR.TIMEOUT_ERROR)
-            } else if (e is ConnectException) {
-                IException("网络连接异常，请检查您的网络状态后重试！", e, ERROR.TIMEOUT_ERROR)
-            } else if (e is ConnectTimeoutException) {
-                IException("网络连接超时，请检查您的网络状态后重试！", e, ERROR.TIMEOUT_ERROR)
-            } else if (e is UnknownHostException) {
-                IException("网络连接异常，请检查您的网络状态后重试！", e, ERROR.TIMEOUT_ERROR)
-            } else if (e is NullPointerException) {
-                IException("空指针", e, ERROR.NULL_POINTER_EXCEPTION)
-            } else if (e is SSLHandshakeException) {
-                IException("证书验证失败", e, ERROR.SSL_ERROR)
-            } else if (e is ClassCastException) {
-                IException("类型转换失败", e, ERROR.CAST_ERROR)
-            } else if (e is JsonParseException
-                || e is JSONException
-                || e is JsonSerializer<*>
-                || e is NotSerializableException
-                || e is ParseException
-            ) {
-                IException("解析失败", e, ERROR.PARSE_ERROR)
-            } else if (e is IllegalStateException) {
-                IException("非法状态", e, ERROR.ILLEGAL_STATE_ERROR)
-            } else {
-                IException("未知错误", e, ERROR.UNKNOWN)
+                is SocketTimeoutException, is ConnectTimeoutException -> {
+                    IException("网络连接超时，请检查您的网络状态后重试！", e, ERROR.TIMEOUT_ERROR)
+                }
+                is ConnectException, is UnknownHostException -> {
+                    IException("网络连接异常，请检查您的网络状态后重试！", e, ERROR.TIMEOUT_ERROR)
+                }
+                is NullPointerException -> {
+                    IException("空指针", e, ERROR.NULL_POINTER_EXCEPTION)
+                }
+                is SSLHandshakeException -> {
+                    IException("证书验证失败", e, ERROR.SSL_ERROR)
+                }
+                is ClassCastException -> {
+                    IException("类型转换失败", e, ERROR.CAST_ERROR)
+                }
+                is JsonParseException, is JSONException, is JsonSerializer<*>, is NotSerializableException, is ParseException -> {
+                    IException("解析失败", e, ERROR.PARSE_ERROR)
+                }
+                is IllegalStateException -> {
+                    IException("非法状态", e, ERROR.ILLEGAL_STATE_ERROR)
+                }
+                is IllegalArgumentException -> {
+                    IException("非法参数", e, ERROR.ILLEGAL_ARGUMENT_ERROR)
+                }
+                else -> {
+                    IException("未知错误", e, ERROR.UNKNOWN)
+                }
             }
         }
     }
