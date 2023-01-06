@@ -16,6 +16,11 @@ import java.lang.reflect.ParameterizedType
 object ViewBindingUtils {
     /**
      * description 绑定Activity
+     *              protected var binding: vb? = null
+     *              override fun setContentView(layoutResID: Int) {
+     *                  binding = ViewBindingUtils.bindActivity<vb>(layoutInflater)
+     *                  super.setContentView(binding?.root ?: layoutInflater.inflate(layoutResID, null))
+     *              }
      */
     fun <vb : ViewBinding?> bindActivity(layoutInflater: LayoutInflater): vb? {
         var binding: vb? = null
@@ -38,6 +43,11 @@ object ViewBindingUtils {
 
     /**
      * description 绑定Fragment
+     *             protected var binding: vb? = null
+     *             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+     *                  binding = ViewBindingUtils.bindFragment<vb>(layoutInflater)
+     *                  super.onViewCreated(view, savedInstanceState)
+     *             }
      */
     fun <vb : ViewBinding?> bindFragment(layoutInflater: LayoutInflater): vb? {
         var binding: vb? = null
