@@ -2,6 +2,7 @@ package com.zhangteng.utils
 
 import android.app.Activity
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
@@ -16,7 +17,7 @@ import java.lang.reflect.ParameterizedType
  */
 object ViewBindingUtils {
     /**
-     * description 绑定Activity
+     * description 绑定Activity 必须保证被绑定类第一个泛型是ViewBinding
      *              protected var binding: vb? = null
      *              override fun setContentView(layoutResID: Int) {
      *                  binding = ViewBindingUtils.bind<vb>(this)
@@ -43,11 +44,11 @@ object ViewBindingUtils {
     }
 
     /**
-     * description 绑定Fragment
+     * description 绑定Fragment 必须保证被绑定类第一个泛型是ViewBinding
      *             protected var binding: vb? = null
      *             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
      *                  binding = ViewBindingUtils.bind<vb>(this)
-     *                  super.onViewCreated(view, savedInstanceState)
+     *                  super.onViewCreated(binding?.root ?: view, savedInstanceState)
      *             }
      */
     fun <vb : ViewBinding?> bind(fragment: Fragment): vb? {
@@ -81,6 +82,89 @@ object ViewBindingUtils {
             } catch (e: InvocationTargetException) {
                 e.printStackTrace()
             }
+        }
+        return binding
+    }
+
+    /**
+     * description 绑定任意View
+     *             protected var binding: vb? = null
+     *             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+     *                  binding = ViewBindingUtils.bind<vb>(layoutInflater, root, false)
+     *                  super.onViewCreated(binding?.root ?: view, savedInstanceState)
+     *             }
+     */
+    inline fun <reified vb : ViewBinding?> bind(
+        layoutInflater: LayoutInflater,
+        parent: View,
+        attachToParent: Boolean
+    ): vb? {
+        var binding: vb? = null
+        try {
+            val method = vb::class.java.getMethod(
+                "inflate",
+                LayoutInflater::class.java,
+                ViewGroup::class.java,
+                Boolean::class.javaPrimitiveType
+            )
+            binding = method.invoke(
+                null,
+                layoutInflater,
+                parent,
+                attachToParent
+            ) as vb
+        } catch (e: NoSuchMethodException) {
+            e.printStackTrace()
+        } catch (e: IllegalAccessException) {
+            e.printStackTrace()
+        } catch (e: InvocationTargetException) {
+            e.printStackTrace()
+        }
+        return binding
+    }
+
+    /**
+     * description 绑定任意View
+     *             protected var binding: vb? = null
+     *             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+     *                  binding = ViewBindingUtils.bind<vb>(layoutInflater)
+     *                  super.onViewCreated(binding?.root ?: view, savedInstanceState)
+     *             }
+     */
+    inline fun <reified vb : ViewBinding?> bind(layoutInflater: LayoutInflater): vb? {
+        var binding: vb? = null
+        try {
+            val method = vb::class.java.getMethod("inflate", LayoutInflater::class.java)
+            binding = method.invoke(null, layoutInflater) as vb
+        } catch (e: NoSuchMethodException) {
+            e.printStackTrace()
+        } catch (e: IllegalAccessException) {
+            e.printStackTrace()
+        } catch (e: InvocationTargetException) {
+            e.printStackTrace()
+        }
+        return binding
+    }
+
+    /**
+     * description 绑定任意View
+     *             protected var binding: vb? = null
+     *             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+     *                  binding = ViewBindingUtils.bind<vb>(view)
+     *                  super.onViewCreated(binding?.root ?: view, savedInstanceState)
+     *             }
+     */
+    inline fun <reified vb : ViewBinding?> bind(view: View): vb? {
+        var binding: vb? = null
+        try {
+            val method = vb::class.java.getMethod("bind", View::class.java)
+            binding = method.invoke(null, view) as vb
+        } catch (e: NoSuchMethodException) {
+            e.printStackTrace()
+        } catch (e: IllegalAccessException) {
+            e.printStackTrace()
+        } catch (e: InvocationTargetException) {
+            e.printStackTrace()
         }
         return binding
     }
