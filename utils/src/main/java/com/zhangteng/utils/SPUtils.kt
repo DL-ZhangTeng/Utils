@@ -12,9 +12,9 @@ import java.lang.reflect.Method
  * @param defaultValue
  */
 fun Context?.putToSP(
-    spName: String? = "currentUser",
     key: String?,
-    defaultValue: Any?
+    defaultValue: Any?,
+    spName: String? = "currentUser"
 ) {
     if (this == null || spName == null || key == null) return
     val sp = getSharedPreferences(
@@ -53,9 +53,9 @@ fun Context?.putToSP(
  * @return
  */
 fun Context?.getFromSP(
-    spName: String? = "currentUser",
     key: String?,
-    defaultObject: Any?
+    defaultObject: Any?,
+    spName: String? = "currentUser"
 ): Any? {
     if (this == null || spName == null || key == null) return null
     val sp = getSharedPreferences(
@@ -77,9 +77,9 @@ fun Context?.getFromSP(
 }
 
 fun Context?.getFromSPToSet(
-    spName: String? = "currentUser",
     key: String?,
-    defaultSet: Set<String?>?
+    defaultSet: Set<String?>?,
+    spName: String? = "currentUser"
 ): Set<String>? {
     if (this == null || spName == null || key == null) return null
     val sp = getSharedPreferences(
@@ -108,7 +108,7 @@ fun Context?.getFromSPForAll(spName: String? = "currentUser"): MutableMap<String
  *
  * @param key
  */
-fun Context?.removeFromSP(spName: String? = "currentUser", key: String?) {
+fun Context?.removeFromSP(key: String?, spName: String? = "currentUser") {
     if (this == null || spName == null || key == null) return
     val sp = getSharedPreferences(
         spName,
@@ -140,7 +140,7 @@ fun Context?.clearFromSP(spName: String? = "currentUser") {
  * @param key
  * @return
  */
-fun Context?.containsInSP(spName: String? = "currentUser", key: String?): Boolean? {
+fun Context?.containsInSP(key: String?, spName: String? = "currentUser"): Boolean? {
     if (this == null || spName == null || key == null) return null
     val sp = getSharedPreferences(
         spName,
