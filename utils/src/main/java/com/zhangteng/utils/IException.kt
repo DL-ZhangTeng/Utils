@@ -95,6 +95,9 @@ open class IException : Exception {
         fun handleException(e: Throwable): IException {
             e.printStackTrace()
             return when (e) {
+                is IException -> {
+                    e
+                }
                 is HttpException -> {
                     try {
                         val message = e.response()!!.errorBody()!!.string()
