@@ -14,7 +14,7 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:Utils:2.1.0'
+implementation 'com.github.DL-ZhangTeng:Utils:2.1.1'
 ```
 
 ## 混淆
@@ -25,7 +25,8 @@ implementation 'com.github.DL-ZhangTeng:Utils:2.1.0'
 
 | 版本     | 更新                               | 更新时间                |
 |--------|----------------------------------|---------------------|
-| v2.1.0 | ViewBindingUtils.kt              | 2023/01/09 at 00:08 |
+| v2.1.1 | handleException过滤IException      | 2023/2/3 at 20:11   |
+| v2.1.0 | ViewBindingUtils.kt              | 2023/1/9 at 00:08   |
 | v2.0.3 | 添加解压与读取本地json工具类                 | 2022/11/29 at 11:34 |
 | v2.0.2 | 添加文件切割工具                         | 2022/11/7 at 17:34  |
 | v2.0.1 | BitmapUtils.kt增加压缩图片方法、获取view的截图 | 2022/10/26 at 11:13 |
