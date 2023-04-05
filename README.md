@@ -14,7 +14,7 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:Utils:2.1.1'
+implementation 'com.github.DL-ZhangTeng:Utils:2.1.2'
 ```
 
 ## 混淆
@@ -25,6 +25,7 @@ implementation 'com.github.DL-ZhangTeng:Utils:2.1.1'
 
 | 版本     | 更新                               | 更新时间                |
 |--------|----------------------------------|---------------------|
+| v2.1.2 | 加载中文案显示处理&相册刷新                       | 2023/4/5 at 21:34   |
 | v2.1.1 | handleException过滤IException      | 2023/2/3 at 20:11   |
 | v2.1.0 | ViewBindingUtils.kt              | 2023/1/9 at 00:08   |
 | v2.0.3 | 添加解压与读取本地json工具类                 | 2022/11/29 at 11:34 |
