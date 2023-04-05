@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00000000"
     android:gravity="center">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_gravity="center"
         android:background="@drawable/shape_loading"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/progress_bar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
+            android:layout_height="wrap_content"
+            android:maxHeight="90dp"
             android:scaleType="centerInside"
             android:src="@drawable/loading1" />
 
@@ -24,12 +26,13 @@
             android:id="@+id/loadView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/progress_bar"
-            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
             android:gravity="center"
             android:textColor="#ffffff"
             android:textSize="13sp"
-            android:visibility="gone" />
-    </RelativeLayout>
+            android:visibility="gone"
+            tools:text="加载中..."
+            tools:visibility="visible" />
+    </LinearLayout>
 </LinearLayout>
 

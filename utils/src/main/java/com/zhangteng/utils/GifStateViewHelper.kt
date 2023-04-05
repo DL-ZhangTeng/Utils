@@ -42,8 +42,11 @@ open class GifStateViewHelper : StateViewHelper() {
             mLoadImageView = view.findViewById(R.id.progress_bar)
             mLoadImageView?.setImageResource(mLoadingImage)
 
-            if (mLoadingText != null) {
+            if (!mLoadingText.isNullOrEmpty()) {
+                mLoadTextView?.visibility = View.VISIBLE
                 mLoadTextView?.text = mLoadingText
+            } else {
+                mLoadTextView?.visibility = View.GONE
             }
             mProgressDialog?.setContentView(view)
             mProgressDialog?.setCancelable(true)
@@ -62,8 +65,11 @@ open class GifStateViewHelper : StateViewHelper() {
                     mProgressDialog?.setOwnerActivity(activity)
             }
         } else {
-            if (mLoadingText != null && mLoadTextView != null) {
+            if (!mLoadingText.isNullOrEmpty()) {
+                mLoadTextView?.visibility = View.VISIBLE
                 mLoadTextView?.text = mLoadingText
+            } else {
+                mLoadTextView?.visibility = View.GONE
             }
         }
         val activity1 = mProgressDialog?.ownerActivity
