@@ -20,11 +20,13 @@ object ViewBindingUtils {
      * description 绑定Activity 必须保证被绑定类第一个泛型是ViewBinding
      *              protected var binding: vb? = null
      *              override fun setContentView(layoutResID: Int) {
-     *                  binding = ViewBindingUtils.bind<vb>(this)
+     *                  binding = ViewBindingUtils.inflate<vb>(this)
      *                  super.setContentView(binding?.root ?: layoutInflater.inflate(layoutResID, null))
      *              }
+     *
+     * @param activity 绑定Activity 必须保证被绑定类第一个泛型是ViewBinding
      */
-    fun <vb : ViewBinding?> bind(activity: Activity): vb? {
+    fun <vb : ViewBinding?> inflate(activity: Activity): vb? {
         var binding: vb? = null
         val type = activity.javaClass.genericSuperclass
         if (type is ParameterizedType) {
@@ -44,14 +46,46 @@ object ViewBindingUtils {
     }
 
     /**
+     * description 绑定Activity 必须保证被绑定类第一个泛型是ViewBinding
+     *              protected var binding: vb? = null
+     *              override fun setContentView(view: View?) {
+     *                  binding = ViewBindingUtils.bind<vb>(this, view)
+     *                  super.setContentView(binding?.root ?: view)
+     *              }
+     *
+     * @param activity 绑定Activity 必须保证被绑定类第一个泛型是ViewBinding
+     * @param view 被绑定的view
+     */
+    fun <vb : ViewBinding?> bind(activity: Activity, view: View): vb? {
+        var binding: vb? = null
+        val type = activity.javaClass.genericSuperclass
+        if (type is ParameterizedType) {
+            try {
+                val clazz = type.actualTypeArguments[0] as Class<vb>
+                val method = clazz.getMethod("bind", View::class.java)
+                binding = method.invoke(null, view) as vb
+            } catch (e: NoSuchMethodException) {
+                e.printStackTrace()
+            } catch (e: IllegalAccessException) {
+                e.printStackTrace()
+            } catch (e: InvocationTargetException) {
+                e.printStackTrace()
+            }
+        }
+        return binding
+    }
+
+    /**
      * description 绑定Fragment 必须保证被绑定类第一个泛型是ViewBinding
      *             protected var binding: vb? = null
      *             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-     *                  binding = ViewBindingUtils.bind<vb>(this)
+     *                  binding = ViewBindingUtils.inflate<vb>(this)
      *                  super.onViewCreated(binding?.root ?: view, savedInstanceState)
      *             }
+     *
+     * @param fragment 绑定Fragment 必须保证被绑定类第一个泛型是ViewBinding
      */
-    fun <vb : ViewBinding?> bind(fragment: Fragment): vb? {
+    fun <vb : ViewBinding?> inflate(fragment: Fragment): vb? {
         var binding: vb? = null
         val type = fragment.javaClass.genericSuperclass
         if (type is ParameterizedType) {
@@ -87,14 +121,54 @@ object ViewBindingUtils {
     }
 
     /**
+     * description 绑定Fragment 必须保证被绑定类第一个泛型是ViewBinding
+     *             protected var binding: vb? = null
+     *             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+     *                  binding = ViewBindingUtils.bind<vb>(this, view)
+     *                  super.onViewCreated(binding?.root ?: view, savedInstanceState)
+     *             }
+     *
+     * @param fragment 绑定Fragment 必须保证被绑定类第一个泛型是ViewBinding
+     * @param view 被绑定的view
+     */
+    fun <vb : ViewBinding?> bind(fragment: Fragment, view: View): vb? {
+        var binding: vb? = null
+        val type = fragment.javaClass.genericSuperclass
+        if (type is ParameterizedType) {
+            try {
+                val clazz = type.actualTypeArguments[0] as Class<vb>
+                val method = clazz.getMethod("bind", View::class.java)
+                binding = method.invoke(null, view) as vb
+                setValueByPropName(
+                    "mView",
+                    fragment,
+                    binding!!.root,
+                    Fragment::class.java
+                )
+            } catch (e: NoSuchMethodException) {
+                e.printStackTrace()
+            } catch (e: IllegalAccessException) {
+                e.printStackTrace()
+            } catch (e: InvocationTargetException) {
+                e.printStackTrace()
+            }
+        }
+        return binding
+    }
+
+    /**
      * description 绑定任意View
      *             protected var binding: vb? = null
      *             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-     *                  binding = ViewBindingUtils.bind<vb>(layoutInflater, root, false)
+     *                  binding = ViewBindingUtils.inflate<vb>(layoutInflater, root, false)
      *                  super.onViewCreated(binding?.root ?: view, savedInstanceState)
      *             }
+     *
+     * @param layoutInflater 布局渲染类
+     * @param parent 父控件
+     * @param attachToParent 是否绑定到父控件
      */
-    inline fun <reified vb : ViewBinding?> bind(
+    inline fun <reified vb : ViewBinding?> inflate(
         layoutInflater: LayoutInflater,
         parent: View,
         attachToParent: Boolean
@@ -127,11 +201,13 @@ object ViewBindingUtils {
      * description 绑定任意View
      *             protected var binding: vb? = null
      *             override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-     *                  binding = ViewBindingUtils.bind<vb>(layoutInflater)
+     *                  binding = ViewBindingUtils.inflate<vb>(layoutInflater)
      *                  super.onViewCreated(binding?.root ?: view, savedInstanceState)
      *             }
+     *
+     * @param layoutInflater 布局渲染类
      */
-    inline fun <reified vb : ViewBinding?> bind(layoutInflater: LayoutInflater): vb? {
+    inline fun <reified vb : ViewBinding?> inflate(layoutInflater: LayoutInflater): vb? {
         var binding: vb? = null
         try {
             val method = vb::class.java.getMethod("inflate", LayoutInflater::class.java)
@@ -153,6 +229,8 @@ object ViewBindingUtils {
      *                  binding = ViewBindingUtils.bind<vb>(view)
      *                  super.onViewCreated(binding?.root ?: view, savedInstanceState)
      *             }
+     *
+     * @param view 被绑定的view
      */
     inline fun <reified vb : ViewBinding?> bind(view: View): vb? {
         var binding: vb? = null
