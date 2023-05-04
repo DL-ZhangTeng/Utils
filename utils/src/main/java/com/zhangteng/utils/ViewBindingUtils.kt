@@ -103,12 +103,6 @@ object ViewBindingUtils {
                     getValueByPropName("mContainer", fragment, Fragment::class.java),
                     false
                 ) as vb
-                setValueByPropName(
-                    "mView",
-                    fragment,
-                    binding!!.root,
-                    Fragment::class.java
-                )
             } catch (e: NoSuchMethodException) {
                 e.printStackTrace()
             } catch (e: IllegalAccessException) {
@@ -139,12 +133,6 @@ object ViewBindingUtils {
                 val clazz = type.actualTypeArguments[0] as Class<vb>
                 val method = clazz.getMethod("bind", View::class.java)
                 binding = method.invoke(null, view) as vb
-                setValueByPropName(
-                    "mView",
-                    fragment,
-                    binding!!.root,
-                    Fragment::class.java
-                )
             } catch (e: NoSuchMethodException) {
                 e.printStackTrace()
             } catch (e: IllegalAccessException) {
@@ -247,38 +235,38 @@ object ViewBindingUtils {
         return binding
     }
 
-    private fun setValueByPropName(tar: String, o: Any?, `val`: Any?, clazz: Class<*>?) {
-        val field = getFiled(tar, clazz)
+    fun setValueByPropName(filedName: String, obj: Any?, subObj: Any?, clazz: Class<*>?) {
+        val field = getFiled(filedName, clazz)
         field.isAccessible = true
         try {
-            field[o] = `val`
+            field[obj] = subObj
         } catch (e: IllegalAccessException) {
             e.printStackTrace()
         }
     }
 
-    private fun getValueByPropName(filedName: String, o: Any?, clazz: Class<*>?): Any? {
+    fun getValueByPropName(filedName: String, obj: Any?, clazz: Class<*>?): Any? {
         val field = getFiled(filedName, clazz)
         field.isAccessible = true
         try {
-            return field[o]
+            return field[obj]
         } catch (e: IllegalAccessException) {
             e.printStackTrace()
         }
         return null
     }
 
-    private fun getFiled(tar: String, clazz: Class<*>?): Field {
-        var clazz = clazz
+    fun getFiled(tar: String, clazz: Class<*>?): Field {
+        var localClazz = clazz
         var error: String? = null
         var field: Field? = null
-        while (clazz != null) {
+        while (localClazz != null) {
             try {
-                field = clazz.getDeclaredField(tar)
+                field = localClazz.getDeclaredField(tar)
                 error = null
                 break
             } catch (e: Exception) {
-                clazz = clazz.superclass
+                localClazz = localClazz.superclass
                 error = e.message
             }
         }
