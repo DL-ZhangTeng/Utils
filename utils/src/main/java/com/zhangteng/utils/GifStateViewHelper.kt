@@ -51,8 +51,10 @@ open class GifStateViewHelper : StateViewHelper() {
             mProgressDialog?.setContentView(view)
             mProgressDialog?.setCancelable(true)
             mProgressDialog?.setCanceledOnTouchOutside(false)
-            mProgressDialog?.setOnDismissListener {
-                cancelRequestListener?.cancel(it)
+            mProgressDialog?.setOnDismissListener { dialog ->
+                cancelRequestListeners.forEach {
+                    it.cancel(dialog)
+                }
             }
             val activity = findActivity(mContext)
             if (activity == null || activity.isDestroyed || activity.isFinishing) {
