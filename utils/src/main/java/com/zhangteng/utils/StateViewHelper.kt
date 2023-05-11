@@ -26,7 +26,7 @@ open class StateViewHelper {
     /**
      * description: 状态View重试回调
      */
-    open var againRequestListener: AgainRequestListener? = null
+    open var againRequestListeners: HashSet<AgainRequestListener> = HashSet(1)
 
     /**
      * description: 加载中弹窗
@@ -45,7 +45,7 @@ open class StateViewHelper {
     /**
      * description: 加载中取消回调
      */
-    open var cancelRequestListener: CancelRequestListener? = null
+    open var cancelRequestListeners: HashSet<CancelRequestListener> = HashSet(1)
 
     /**
      * 无网络view
@@ -117,7 +117,9 @@ open class StateViewHelper {
         }
         mStateView.setAgainRequestListener(object : StateView.AgainRequestListener {
             override fun request(view: View) {
-                againRequestListener?.request(view)
+                againRequestListeners.forEach {
+                    it.request(view)
+                }
             }
         })
         if (mStateView.isStateViewShow()) {
@@ -189,8 +191,10 @@ open class StateViewHelper {
             mProgressDialog?.setContentView(view)
             mProgressDialog?.setCancelable(true)
             mProgressDialog?.setCanceledOnTouchOutside(false)
-            mProgressDialog?.setOnDismissListener {
-                cancelRequestListener?.cancel(it)
+            mProgressDialog?.setOnDismissListener { dialog ->
+                cancelRequestListeners.forEach {
+                    it.cancel(dialog)
+                }
             }
             val activity = findActivity(mContext)
             if (activity == null || activity.isDestroyed || activity.isFinishing) {
