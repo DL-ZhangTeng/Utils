@@ -14,7 +14,7 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:Utils:2.3.0'
+implementation 'com.github.DL-ZhangTeng:Utils:2.3.1'
 ```
 
 ## 混淆
@@ -25,6 +25,7 @@ implementation 'com.github.DL-ZhangTeng:Utils:2.3.0'
 
 | 版本     | 更新                                    | 更新时间                |
 |--------|---------------------------------------|---------------------|
+| v2.3.1 | IException增加常见异常                      | 2023/9/8 at 14:30   |
 | v2.3.0 | StateViewHelper重试&取消回调支持多个监听器         | 2023/5/11 at 10:40  |
 | v2.2.1 | ViewBindingUtils移除Fragment反射设置mView功能 | 2023/5/4 at 18:00   |
 | v2.2.0 | ViewBindingUtils重写inflate与bind分开      | 2023/4/5 at 21:34   |
