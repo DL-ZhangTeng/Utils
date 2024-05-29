@@ -1,10 +1,20 @@
 package com.zhangteng.utils
 
 import android.util.Log
-import java.lang.Runnable
 import java.net.ConnectException
 import java.net.SocketTimeoutException
-import java.util.concurrent.*
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.Callable
+import java.util.concurrent.CancellationException
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.Executors
+import java.util.concurrent.Future
+import java.util.concurrent.RejectedExecutionHandler
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.ScheduledThreadPoolExecutor
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 /**
  * description: 线程池工具
@@ -49,7 +59,18 @@ class ThreadPoolUtils private constructor() {
      *
      * @param paramRunnable
      */
-    fun addExecuteTask(paramRunnable: Callable<*>?): Future<*>? {
+    fun <T> addExecuteTask(paramRunnable: Runnable?, result: T): Future<T>? {
+        return if (paramRunnable == null) {
+            null
+        } else threadPool.submit(paramRunnable, result)
+    }
+
+    /**
+     * 任务添加到线程池中
+     *
+     * @param paramRunnable
+     */
+    fun <T> addExecuteTask(paramRunnable: Callable<T>?): Future<T>? {
         return if (paramRunnable == null) {
             null
         } else threadPool.submit(paramRunnable)
@@ -74,7 +95,8 @@ class ThreadPoolUtils private constructor() {
      */
     fun addDelayExecuteTask(task: Runnable?, delayTime: Long) {
         appSchedule.schedule(
-            DelayTask(task), delayTime,
+            DelayTask(task),
+            delayTime,
             TimeUnit.MILLISECONDS
         )
     }
@@ -159,7 +181,10 @@ class ThreadPoolUtils private constructor() {
                         "系统自有线程池任务调用超时异常,error_msg==" + cause!!.message
                     )
                 } else {
-                    Log.e(instance.javaClass.simpleName, "系统自有线程池任务异常,error_msg==" + t.message)
+                    Log.e(
+                        instance.javaClass.simpleName,
+                        "系统自有线程池任务异常,error_msg==" + t.message
+                    )
                 }
             }
         }
