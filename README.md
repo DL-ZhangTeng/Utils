@@ -14,7 +14,7 @@ allprojects {
     }
 }
 
-implementation 'com.github.DL-ZhangTeng:Utils:2.3.2'
+implementation 'com.github.DL-ZhangTeng:Utils:2.3.3'
 ```
 
 ## 混淆
@@ -25,6 +25,7 @@ implementation 'com.github.DL-ZhangTeng:Utils:2.3.2'
 
 | 版本     | 更新                                    | 更新时间                |
 |--------|---------------------------------------|---------------------|
+| v2.3.3 | 更新日期工具类                               | 2024/6/17 at 11:19  |
 | v2.3.2 | 线程池工具增加泛型                             | 2024/5/29 at 17:01  |
 | v2.3.1 | IException增加常见异常                      | 2023/9/8 at 14:30   |
 | v2.3.0 | StateViewHelper重试&取消回调支持多个监听器         | 2023/5/11 at 10:40  |
